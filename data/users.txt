@@ -1,0 +1,4 @@
+admin,admin123,Admin
+kaveesha,kavee123,Teacher
+pasindu,pasindu123,Teacher
+tharusha,tharusha123,Student
