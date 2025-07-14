@@ -1,4 +1,5 @@
 admin,admin123,Admin
 kaveesha,kavee123,Teacher
-pasindu,pasindu123,Teacher
-tharusha,tharusha123,Student
+pasi,pasi123,Student
+kamal,kamal123,Teacher
+shakila,123,Student

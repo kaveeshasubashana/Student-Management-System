@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// LoginFrame class extends JFrame to create the login window
+// LoginFrame class extends JFrame to create the login window with a modern look
 public class LoginFrame extends JFrame {
     private JTextField usernameField; // Text field for username input
     private JPasswordField passwordField; // Password field for password input
@@ -26,50 +26,88 @@ public class LoginFrame extends JFrame {
         // Set the default close operation to exit the application when the window is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Set the size of the login window
-        setSize(400, 300);
+        setSize(450, 350); // Slightly larger for better spacing
         // Center the window on the screen
         setLocationRelativeTo(null);
         // Set the layout manager for the frame to BorderLayout
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(20, 20)); // Add some padding around the main panels
 
         // Initialize AuthService
         authService = new AuthService();
 
-        // Create a panel for the input fields and labels
-        JPanel inputPanel = new JPanel();
-        // Set the layout for the input panel to GridLayout for organized arrangement
-        inputPanel.setLayout(new GridLayout(4, 2, 10, 10)); // Rows, Cols, HGap, VGap
-        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Add padding
+        // --- Header Panel ---
+        JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(new Color(60, 90, 150)); // Dark blue header
+        JLabel titleLabel = new JLabel("Welcome to SMS", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28)); // Modern font, larger size
+        titleLabel.setForeground(Color.WHITE); // White text
+        headerPanel.add(titleLabel);
+        add(headerPanel, BorderLayout.NORTH);
 
-        // Initialize components
-        usernameField = new JTextField(20); // Username text field with preferred column width
-        passwordField = new JPasswordField(20); // Password field
-        roleComboBox = new JComboBox<>(new String[]{"Admin", "Teacher", "Student"}); // Role selection combo box
-        loginButton = new JButton("Login"); // Login button
-        messageLabel = new JLabel("", SwingConstants.CENTER); // Message label, centered text
+        // --- Input Panel ---
+        JPanel inputPanel = new JPanel(new GridBagLayout()); // Use GridBagLayout for flexible positioning
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Add padding
 
-        // Add components to the input panel
-        inputPanel.add(new JLabel("Username:")); // Label for username
-        inputPanel.add(usernameField); // Username input field
-        inputPanel.add(new JLabel("Password:")); // Label for password
-        inputPanel.add(passwordField); // Password input field
-        inputPanel.add(new JLabel("Role:")); // Label for role selection
-        inputPanel.add(roleComboBox); // Role combo box
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Padding between components
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Components fill horizontal space
 
-        // Add the input panel to the center of the frame
+        // Username
+        gbc.gridx = 0; // Column 0
+        gbc.gridy = 0; // Row 0
+        inputPanel.add(new JLabel("Username:"), gbc);
+
+        gbc.gridx = 1; // Column 1
+        gbc.gridy = 0;
+        usernameField = new JTextField(20);
+        usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        inputPanel.add(usernameField, gbc);
+
+        // Password
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        inputPanel.add(new JLabel("Password:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        passwordField = new JPasswordField(20);
+        passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        inputPanel.add(passwordField, gbc);
+
+        // Role
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        inputPanel.add(new JLabel("Role:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        roleComboBox = new JComboBox<>(new String[]{"Admin", "Teacher", "Student"});
+        roleComboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        ((JLabel)roleComboBox.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER); // Center text in combobox
+        inputPanel.add(roleComboBox, gbc);
+
         add(inputPanel, BorderLayout.CENTER);
 
-        // Create a panel for the login button and message label
-        JPanel buttonPanel = new JPanel(new BorderLayout());
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20)); // Add padding
+        // --- Footer Panel (Button and Message) ---
+        JPanel footerPanel = new JPanel(new BorderLayout(10, 10));
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(0, 30, 20, 30)); // Padding
 
-        // Add login button to the button panel (at the top of this panel)
-        buttonPanel.add(loginButton, BorderLayout.NORTH);
-        // Add message label to the button panel (at the bottom of this panel)
-        buttonPanel.add(messageLabel, BorderLayout.SOUTH);
+        loginButton = new JButton("Login");
+        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        loginButton.setBackground(new Color(70, 130, 180)); // Steel Blue
+        loginButton.setForeground(Color.WHITE); // White text
+        loginButton.setFocusPainted(false); // Remove focus border
+        loginButton.setBorderPainted(false); // Remove default border
+        loginButton.setOpaque(true); // Ensure background color is visible
+        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Button padding
 
-        // Add the button panel to the south of the main frame
-        add(buttonPanel, BorderLayout.SOUTH);
+        messageLabel = new JLabel("", SwingConstants.CENTER);
+        messageLabel.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+
+        footerPanel.add(loginButton, BorderLayout.NORTH);
+        footerPanel.add(messageLabel, BorderLayout.SOUTH);
+
+        add(footerPanel, BorderLayout.SOUTH);
 
         // Add an ActionListener to the login button
         loginButton.addActionListener(new ActionListener() {
@@ -81,49 +119,46 @@ public class LoginFrame extends JFrame {
         });
     }
 
-    // Method to handle the login process
+    // Method to handle the login process (functionality remains unchanged)
     private void login() {
-        // Get the username, password, and selected role from the input fields
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
         String role = (String) roleComboBox.getSelectedItem();
 
-        // Attempt to authenticate the user using AuthService
         User loggedInUser = authService.authenticateUser(username, password, role);
 
-        // Check if authentication was successful
         if (loggedInUser != null) {
-            messageLabel.setText("Login Successful!"); // Display success message
-            messageLabel.setForeground(Color.BLUE); // Set message color to blue
-
-            // Open the appropriate dashboard based on the user's role
-            openDashboard(loggedInUser);
-            // Hide the login window after successful login
-            this.dispose();
+            messageLabel.setText("Login Successful!");
+            messageLabel.setForeground(new Color(34, 139, 34)); // Forest Green
+            // Delay closing the login window slightly to show the success message
+            Timer timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    openDashboard(loggedInUser);
+                    dispose(); // Close the login window
+                }
+            });
+            timer.setRepeats(false); // Only run once
+            timer.start();
         } else {
-            messageLabel.setText("Invalid Username, Password, or Role."); // Display error message
-            messageLabel.setForeground(Color.RED); // Set message color to red
+            messageLabel.setText("Invalid Username, Password, or Role.");
+            messageLabel.setForeground(new Color(220, 20, 60)); // Crimson Red
         }
     }
 
-    // Method to open the correct dashboard based on the logged-in user's role
+    // Method to open the correct dashboard based on the logged-in user's role (functionality remains unchanged)
     private void openDashboard(User user) {
-        // Use a switch statement to handle different roles
         switch (user.getRole()) {
             case "Admin":
-                // Create and display AdminDashboardFrame
                 new AdminDashboardFrame().setVisible(true);
                 break;
             case "Teacher":
-                // Create and display TeacherDashboardFrame, passing the logged-in teacher's username
                 new TeacherDashboardFrame(user.getUsername()).setVisible(true);
                 break;
             case "Student":
-                // Create and display StudentDashboardFrame, passing the logged-in student's username
                 new StudentDashboardFrame(user.getUsername()).setVisible(true);
                 break;
             default:
-                // If an unknown role is encountered, display an error message
                 JOptionPane.showMessageDialog(this, "Unknown user role.", "Error", JOptionPane.ERROR_MESSAGE);
                 break;
         }

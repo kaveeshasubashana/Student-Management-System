@@ -1,1 +1,2 @@
-kaveesha,tharusha,maths,23.0,f
+kaveesha,pasi,sft,40.0,c
+kamal,shakila,history,40.0,c
