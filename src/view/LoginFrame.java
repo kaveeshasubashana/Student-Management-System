@@ -52,10 +52,15 @@ public class LoginFrame extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10); // Padding between components
         gbc.fill = GridBagConstraints.HORIZONTAL; // Components fill horizontal space
 
-        // Username
+        // Define a font for the labels
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 16); // Increased font size and bold
+
+        // Username Label
         gbc.gridx = 0; // Column 0
         gbc.gridy = 0; // Row 0
-        inputPanel.add(new JLabel("Username:"), gbc);
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setFont(labelFont); // Set font for the label
+        inputPanel.add(usernameLabel, gbc);
 
         gbc.gridx = 1; // Column 1
         gbc.gridy = 0;
@@ -63,10 +68,12 @@ public class LoginFrame extends JFrame {
         usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         inputPanel.add(usernameField, gbc);
 
-        // Password
+        // Password Label
         gbc.gridx = 0;
         gbc.gridy = 1;
-        inputPanel.add(new JLabel("Password:"), gbc);
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(labelFont); // Set font for the label
+        inputPanel.add(passwordLabel, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -74,10 +81,12 @@ public class LoginFrame extends JFrame {
         passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         inputPanel.add(passwordField, gbc);
 
-        // Role
+        // Role Label
         gbc.gridx = 0;
         gbc.gridy = 2;
-        inputPanel.add(new JLabel("Role:"), gbc);
+        JLabel roleLabel = new JLabel("Role:");
+        roleLabel.setFont(labelFont); // Set font for the label
+        inputPanel.add(roleLabel, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
