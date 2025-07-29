@@ -1,2 +1,5 @@
-kaveesha,pasi,sft,40.0,c
-kamal,shakila,history,40.0,c
+teacher1,student1,ICT,23.0,s
+teacher1,student5,et,55.0,d
+teacher2,student5,SFT,34.0,s
+teacher2,student1,SFT,23.0,A
+pasindu,shakila12,ICT,22.0,s

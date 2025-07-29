@@ -143,19 +143,19 @@ public class AdminService {
 
     // Adds a new student to the system.
     // Returns true if successful, false if username already exists.
-    public boolean addStudent(String username, String password, String name, String grade) {
+    public boolean addStudent(String username, String password, String name) { // Removed 'String grade'
         if (authService.isUsernameTaken(username)) {
             return false; // Username already exists
         }
 
         // Add to users.txt
         List<User> users = DataStorage.loadUsers();
-        users.add(new Student(username, password, name, grade)); // Add as a User (role "Student")
+        users.add(new Student(username, password, name, name)); // Modified: Removed grade argument
         DataStorage.saveUsers(users);
 
         // Add to students.txt
         List<Student> students = DataStorage.loadStudents();
-        students.add(new Student(username, password, name, grade));
+        students.add(new Student(username, password, name, name)); // Modified: Removed grade argument
         DataStorage.saveStudents(students);
 
         return true;
@@ -193,7 +193,7 @@ public class AdminService {
                     student.setPassword(newPassword);
                 }
                 student.setName(newName);
-                student.setGrade(newGrade);
+                student.setGrade(newGrade); // Keep this if 'grade' remains a property of Student model
                 updated = true;
                 break;
             }

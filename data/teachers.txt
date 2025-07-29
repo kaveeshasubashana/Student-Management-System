@@ -1,2 +1,3 @@
-kaveesha,kavee123,kavee,ict
-kamal,kamal123,kamal,history
+teacher1,123,teacher1,ET
+teacher2,123,teacher2,SFT
+pasindu,123,pasindu,ICT

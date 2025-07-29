@@ -26,7 +26,7 @@ public class LoginFrame extends JFrame {
         // Set the default close operation to exit the application when the window is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Set the size of the login window
-        setSize(450, 350); // Slightly larger for better spacing
+        setSize(500, 400); // Slightly larger for better spacing
         // Center the window on the screen
         setLocationRelativeTo(null);
         // Set the layout manager for the frame to BorderLayout

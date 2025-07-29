@@ -33,7 +33,7 @@ public class AdminDashboardFrame extends JFrame {
     private JTextField studentUsernameField;
     private JPasswordField studentPasswordField;
     private JTextField studentNameField;
-    private JTextField studentGradeField;
+    // Removed private JTextField studentGradeField;
     private JButton addStudentButton;
     private JButton updateStudentButton;
     private JButton deleteStudentButton;
@@ -113,11 +113,11 @@ public class AdminDashboardFrame extends JFrame {
         studentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Input form for students
-        JPanel studentFormPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel studentFormPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // Changed to 3 rows
         studentUsernameField = new JTextField(20);
         studentPasswordField = new JPasswordField(20);
         studentNameField = new JTextField(20);
-        studentGradeField = new JTextField(20);
+        // Removed studentGradeField initialization
 
         studentFormPanel.add(new JLabel("Username:"));
         studentFormPanel.add(studentUsernameField);
@@ -125,8 +125,7 @@ public class AdminDashboardFrame extends JFrame {
         studentFormPanel.add(studentPasswordField);
         studentFormPanel.add(new JLabel("Name:"));
         studentFormPanel.add(studentNameField);
-        studentFormPanel.add(new JLabel("Grade:"));
-        studentFormPanel.add(studentGradeField);
+        // Removed studentGradeField from panel
 
         // Buttons for student operations
         JPanel studentButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -141,7 +140,7 @@ public class AdminDashboardFrame extends JFrame {
         studentButtonPanel.add(viewStudentsButton);
 
         // Table to display students
-        String[] studentColumnNames = {"Username", "Name", "Grade"};
+        String[] studentColumnNames = {"Username", "Name"}; // Modified: Removed "Grade"
         studentTableModel = new DefaultTableModel(studentColumnNames, 0);
         studentTable = new JTable(studentTableModel);
         JScrollPane studentScrollPane = new JScrollPane(studentTable);
@@ -237,7 +236,7 @@ public class AdminDashboardFrame extends JFrame {
                 int selectedRow = studentTable.getSelectedRow();
                 studentUsernameField.setText(studentTableModel.getValueAt(selectedRow, 0).toString());
                 studentNameField.setText(studentTableModel.getValueAt(selectedRow, 1).toString());
-                studentGradeField.setText(studentTableModel.getValueAt(selectedRow, 2).toString());
+                // Removed studentGradeField.setText(studentTableModel.getValueAt(selectedRow, 2).toString());
                 studentPasswordField.setText(""); // Clear password field for security
             }
         });
@@ -337,14 +336,14 @@ public class AdminDashboardFrame extends JFrame {
         String username = studentUsernameField.getText();
         String password = new String(studentPasswordField.getPassword());
         String name = studentNameField.getText();
-        String grade = studentGradeField.getText();
+        // Removed String grade = studentGradeField.getText();
 
-        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || grade.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill all student fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        if (username.isEmpty() || password.isEmpty() || name.isEmpty()) { // Modified condition
+            JOptionPane.showMessageDialog(this, "Please fill all student fields (Username, Password, Name).", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (adminService.addStudent(username, password, name, grade)) {
+        if (adminService.addStudent(username, password, name)) { // Modified method call
             JOptionPane.showMessageDialog(this, "Student added successfully!");
             clearStudentFields();
             viewAllStudents(); // Refresh table
@@ -353,24 +352,36 @@ public class AdminDashboardFrame extends JFrame {
         }
     }
 
-    private void updateStudent() {
+     private void updateStudent() {
         String username = studentUsernameField.getText();
         String password = new String(studentPasswordField.getPassword()); // Password can be empty if not changing
         String name = studentNameField.getText();
-        String grade = studentGradeField.getText();
+        String grade = ""; // Initialize with empty string, but we'll fetch the actual grade below
 
-        if (username.isEmpty() || name.isEmpty() || grade.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please select a student and fill name/grade fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        if (username.isEmpty() || name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select a student and fill the name field.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // If password field is empty, it means password is not being updated
+        // --- CRITICAL FIX START ---
+        // Fetch the existing student's grade from the data storage
+        // This ensures the grade is preserved and not overwritten with an empty string
+        List<Student> students = adminService.getAllStudents(); // Load all students
+        for (Student student : students) {
+            if (student.getUsername().equals(username)) {
+                grade = student.getGrade(); // Get the existing grade for the selected student
+                break; // Found the student, no need to continue loop
+            }
+        }
+        // --- CRITICAL FIX END ---
+
+        // If password field is empty, it means password is not being updated (pass null to service)
         if (adminService.updateStudent(username, password.isEmpty() ? null : password, name, grade)) {
             JOptionPane.showMessageDialog(this, "Student updated successfully!");
             clearStudentFields();
-            viewAllStudents(); // Refresh table
+            viewAllStudents(); // Refresh table to show updated details
         } else {
-            JOptionPane.showMessageDialog(this, "Failed to update student. Student not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Failed to update student. Student not found or an error occurred.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -397,7 +408,7 @@ public class AdminDashboardFrame extends JFrame {
         studentTableModel.setRowCount(0); // Clear existing data
         List<Student> students = adminService.getAllStudents();
         for (Student student : students) {
-            studentTableModel.addRow(new Object[]{student.getUsername(), student.getName(), student.getGrade()});
+            studentTableModel.addRow(new Object[]{student.getUsername(), student.getName()}); // Modified: Removed student.getGrade()
         }
     }
 
@@ -405,7 +416,7 @@ public class AdminDashboardFrame extends JFrame {
         studentUsernameField.setText("");
         studentPasswordField.setText("");
         studentNameField.setText("");
-        studentGradeField.setText("");
+        // Removed studentGradeField.setText("");
         studentTable.clearSelection();
     }
 
