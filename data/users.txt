@@ -11,3 +11,6 @@ teacher2,123,Teacher
 student5,123,Student
 pasindu,123,Teacher
 shakila12,123,Student
+kakaa,123,Teacher
+adad,123,Teacher
+dad,123,Teacher
