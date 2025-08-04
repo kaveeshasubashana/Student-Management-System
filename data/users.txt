@@ -13,4 +13,4 @@ pasindu,123,Teacher
 shakila12,123,Student
 kakaa,123,Teacher
 adad,123,Teacher
-dad,123,Teacher
+tharuu,123,Teacher
