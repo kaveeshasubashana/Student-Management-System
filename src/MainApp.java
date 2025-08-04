@@ -1,4 +1,6 @@
 // src/MainApp.java
+
+
 import view.LoginFrame; // Import the LoginFrame class from the view package
 import javax.swing.SwingUtilities; // Import SwingUtilities for GUI thread management
 
