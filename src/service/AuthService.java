@@ -10,7 +10,7 @@ import java.util.List;
 // AuthService handles user authentication and initial data setup.
 public class AuthService {
 
-    // Constructor for AuthService.
+    // Constructor for AuthService
     // It ensures that an initial Admin user exists when the application starts.
     public AuthService() {
         initializeAdmin();
