@@ -1,3 +1,0 @@
-student1,123,student121,student1213
-student5,123,student,student6
-shakila12,123,shakila,shakila
