@@ -274,6 +274,11 @@ public class AdminDashboardFrame extends JFrame {
         // Add the tabbed pane to the center of the frame
         add(tabbedPane, BorderLayout.CENTER);
 
+
+
+//use polimoreprism
+
+
         // --- Action Listeners for Teacher Buttons (functionality unchanged) ---
         addTeacherButton.addActionListener(new ActionListener() {
             @Override

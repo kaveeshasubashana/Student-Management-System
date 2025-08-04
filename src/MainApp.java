@@ -17,7 +17,11 @@ public class MainApp {
                 LoginFrame loginFrame = new LoginFrame();
                 // Make the login frame visible to the user
                 loginFrame.setVisible(true);
+
+            
             }
         });
+
+
     }
 }

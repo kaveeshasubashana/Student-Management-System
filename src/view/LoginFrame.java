@@ -26,7 +26,7 @@ public class LoginFrame extends JFrame {
         // Set the default close operation to exit the application when the window is closed
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Set the size of the login window
-        setSize(500, 400); // Slightly larger for better spacing
+        setSize(600, 400); // Slightly larger for better spacing
         // Center the window on the screen
         setLocationRelativeTo(null);
         // Set the layout manager for the frame to BorderLayout
@@ -38,7 +38,7 @@ public class LoginFrame extends JFrame {
         // --- Header Panel ---
         JPanel headerPanel = new JPanel();
         headerPanel.setBackground(new Color(60, 90, 150)); // Dark blue header
-        JLabel titleLabel = new JLabel("Welcome to SMS", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Welcome to Student Management System ", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28)); // Modern font, larger size
         titleLabel.setForeground(Color.WHITE); // White text
         headerPanel.add(titleLabel);
