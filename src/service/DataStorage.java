@@ -30,7 +30,15 @@ public class DataStorage {
         String usersTable = "CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, password TEXT, role TEXT)";
         String teachersTable = "CREATE TABLE IF NOT EXISTS teachers (username TEXT PRIMARY KEY, password TEXT, name TEXT, subject TEXT)";
         String studentsTable = "CREATE TABLE IF NOT EXISTS students (username TEXT PRIMARY KEY, password TEXT, name TEXT, grade TEXT)";
-        String marksTable = "CREATE TABLE IF NOT EXISTS marks (id INTEGER PRIMARY KEY AUTOINCREMENT, teacher_username TEXT, student_username TEXT, subject TEXT, marks REAL, grade TEXT)";
+        String marksTable = "CREATE TABLE IF NOT EXISTS marks (" +
+    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    "teacher_username TEXT, " +
+    "student_username TEXT, " +
+    "subject TEXT, " +
+    "marks REAL, " +
+    "grade TEXT, " +
+    "UNIQUE(teacher_username, student_username, subject))";
+
 
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(usersTable);
@@ -105,10 +113,10 @@ public class DataStorage {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 teachers.add(new Teacher(
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("name"),
-                    rs.getString("subject")
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("subject")
                 ));
             }
         } catch (SQLException e) {
@@ -140,10 +148,10 @@ public class DataStorage {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 students.add(new Student(
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("name"),
-                    rs.getString("grade")
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("grade")
                 ));
             }
         } catch (SQLException e) {
@@ -153,21 +161,23 @@ public class DataStorage {
     }
 
     // Mark Data Storage
-    public static void saveMarks(List<Mark> marks) {
-        String sql = "INSERT INTO marks (teacher_username, student_username, subject, marks, grade) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            for (Mark mark : marks) {
-                pstmt.setString(1, mark.getTeacherUsername());
-                pstmt.setString(2, mark.getStudentUsername());
-                pstmt.setString(3, mark.getSubject());
-                pstmt.setDouble(4, mark.getMarks());
-                pstmt.setString(5, mark.getGrade());
-                pstmt.executeUpdate();
-            }
-        } catch (SQLException e) {
-            System.err.println("Error saving marks: " + e.getMessage());
+  public static void saveMarks(List<Mark> marks) {
+    String sql = "INSERT OR IGNORE INTO marks (teacher_username, student_username, subject, marks, grade) VALUES (?, ?, ?, ?, ?)";
+
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        for (Mark mark : marks) {
+            pstmt.setString(1, mark.getTeacherUsername());
+            pstmt.setString(2, mark.getStudentUsername());
+            pstmt.setString(3, mark.getSubject());
+            pstmt.setDouble(4, mark.getMarks());
+            pstmt.setString(5, mark.getGrade());
+            pstmt.executeUpdate();
         }
+    } catch (SQLException e) {
+        System.err.println("Error saving marks: " + e.getMessage());
     }
+}
+
 
     public static List<Mark> loadMarks() {
         List<Mark> marks = new ArrayList<>();
@@ -176,11 +186,11 @@ public class DataStorage {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 marks.add(new Mark(
-                    rs.getString("teacher_username"),
-                    rs.getString("student_username"),
-                    rs.getString("subject"),
-                    rs.getDouble("marks"),
-                    rs.getString("grade")
+                        rs.getString("teacher_username"),
+                        rs.getString("student_username"),
+                        rs.getString("subject"),
+                        rs.getDouble("marks"),
+                        rs.getString("grade")
                 ));
             }
         } catch (SQLException e) {
@@ -189,7 +199,7 @@ public class DataStorage {
         return marks;
     }
 
-    // Delete methods for specific entries
+    // Delete methods
     public static void deleteUser(String username) {
         String sql = "DELETE FROM users WHERE username = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

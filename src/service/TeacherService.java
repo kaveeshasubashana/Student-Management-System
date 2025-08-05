@@ -5,7 +5,6 @@ import model.Student;
 import model.Mark;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class TeacherService {
@@ -13,32 +12,30 @@ public class TeacherService {
         return DataStorage.loadStudents();
     }
 
-    public boolean assignMarks(String teacherUsername, String studentUsername, String subject, double marks, String grade) {
-        boolean studentExists = false;
-        List<Student> students = DataStorage.loadStudents();
-        for (Student student : students) {
-            if (student.getUsername().equals(studentUsername)) {
-                studentExists = true;
-                break;
-            }
-        }
-        if (!studentExists) {
-            return false;
-        }
+public boolean assignMarks(String teacherUsername, String studentUsername, String subject, double marks, String grade) {
+    // Check if student exists
+    List<Student> students = DataStorage.loadStudents();
+    boolean studentExists = students.stream()
+            .anyMatch(student -> student.getUsername().equals(studentUsername));
+    if (!studentExists) return false;
 
-        List<Mark> existingMarks = DataStorage.loadMarks();
-        for (Mark mark : existingMarks) {
-            if (mark.getStudentUsername().equals(studentUsername) &&
-                mark.getSubject().equalsIgnoreCase(subject) &&
-                mark.getTeacherUsername().equals(teacherUsername)) {
-                return false;
-            }
+    // Check for duplicate mark
+    List<Mark> existingMarks = DataStorage.loadMarks();
+    for (Mark mark : existingMarks) {
+        if (mark.getTeacherUsername().equals(teacherUsername) &&
+            mark.getStudentUsername().equals(studentUsername) &&
+            mark.getSubject().equalsIgnoreCase(subject)) {
+            return false; // Already assigned
         }
-
-        existingMarks.add(new Mark(teacherUsername, studentUsername, subject, marks, grade));
-        DataStorage.saveMarks(existingMarks);
-        return true;
     }
+
+    // ✅ Only save the new one, not whole list
+    List<Mark> newMarkList = new ArrayList<>();
+    newMarkList.add(new Mark(teacherUsername, studentUsername, subject, marks, grade));
+    DataStorage.saveMarks(newMarkList);
+    return true;
+}
+
 
     public boolean updateMarks(String teacherUsername, String studentUsername, String subject, double newMarks, String newGrade) {
         List<Mark> marks = DataStorage.loadMarks();
